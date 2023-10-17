@@ -60,9 +60,17 @@ def mean_of_days_elapsed_in_projects(filename):
     df['Created'] = pd.to_datetime(df['Created'], dayfirst=True)
     today = datetime.today()
     df['Days Elapsed'] = (today - df['Created']).dt.days
-    mean_days_elapsed_by_project = df.groupby('Project')['Days Elapsed'].mean()
-    consolidated_mean = df['Days Elapsed'].mean()
+    mean_days_elapsed_by_project = df.groupby('Project')['Days Elapsed'].mean().round(2)
+    consolidated_mean = round(df['Days Elapsed'].mean(), 2)
+    # Display results in aligned format
+    print("{:<10} {:<15}".format('Project', 'Days Elapsed'))
+    print('-' * 25)
+    for project, days_elapsed in mean_days_elapsed_by_project.items():
+        print("{:<10} {:<15.3f}".format(project, days_elapsed))
+    print('-' * 25)
+    print("{:<10} {:<15.3f}".format('Consolidated', consolidated_mean))
     return {'By Project': mean_days_elapsed_by_project, 'Consolidated': consolidated_mean}
+
 
 # Function to get Open forms data
 def generate_open_forms_data(filename):
